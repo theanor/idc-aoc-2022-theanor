@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+  <Document name="aoc-template.ZPM">
+    <Module>
+      <Name>aoc-template</Name>
+      <Version>1.0.0</Version>
+      <Packaging>module</Packaging>
+      <SourcesRoot>src</SourcesRoot>
+      <Resource Name="dc.aoc2022.PKG"/>
+    </Module>
+  </Document>
+</Export>

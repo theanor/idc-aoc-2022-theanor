@@ -28,6 +28,9 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
     #Dim ex as %Exception.AbstractException
     
     #Dim line as %String
+    #Dim total,p1l,p1h,p2l,p2h as %Integer
+    #Dim overlap as %Boolean
+
 
    
     Set sc = $$$OK
@@ -36,8 +39,8 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
         While 'inputStream.AtEnd {
             Set line = inputStream.ReadLine(,.sc)
             $$$TOE(sc,..ParseInputLine(line,.p1l,.p1h,.p2l,.p2h))
-            s overlap = ((p2l >= p1l) && (p2h <= p1h))||((p1l >= p2l) && (p1h <= p2h))
-            s total = total + overlap
+            Set overlap = ((p2l >= p1l) && (p2h <= p1h))||((p1l >= p2l) && (p1h <= p2h))
+            Set total = total + overlap
         }
         Write "Part 1 answer : ",total,!
     }
@@ -53,6 +56,8 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
     #Dim ex as %Exception.AbstractException
     
     #Dim line as %String
+    #Dim total,p1l,p1h,p2l,p2h as %Integer
+    #Dim overlap as %Boolean
 
    
     Set sc = $$$OK
@@ -61,8 +66,8 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
         While 'inputStream.AtEnd {
             Set line = inputStream.ReadLine(,.sc)
             $$$TOE(sc,..ParseInputLine(line,.p1l,.p1h,.p2l,.p2h))
-            s overlap = ((p2h>=p1l)&&(p2h <= p1h)) || ((p1h>=p2l)&&(p1h <= p2h))
-            s total = total + overlap
+            Set overlap = ((p2h>=p1l)&&(p2h <= p1h)) || ((p1h>=p2l)&&(p1h <= p2h))
+            Set total = total + overlap
         }
         Write "Part 1 answer : ",total,!
     }
@@ -76,15 +81,17 @@ ClassMethod ParseInputLine(line As %String, ByRef p1l As %String, ByRef p1h As %
 {
     #Dim sc as %Status
     #Dim ex as %Exception.AbstractException
+
+    #Dim p1,p2 As %String
     
     Set sc = $$$OK
     Try {
-      Set p1 = $piece(line,",",1)
-      Set p2 = $piece(line,",",2)
-      Set p1l = $piece(p1,"-",1)
-      Set p1h = $piece(p1,"-",2)
-      Set p2l = $piece(p2,"-",1)
-      Set p2h = $piece(p2,"-",2)
+      Set p1 = $PIECE(line,",",1)
+      Set p2 = $PIECE(line,",",2)
+      Set p1l = $PIECE(p1,"-",1)
+      Set p1h = $PIECE(p1,"-",2)
+      Set p2l = $PIECE(p2,"-",1)
+      Set p2h = $PIECE(p2,"-",2)
     }
     Catch (ex) {
       Set sc = ex.AsStatus()

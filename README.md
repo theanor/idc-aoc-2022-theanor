@@ -1,5 +1,6 @@
-## aoc2020-template
-My solutions for the [Advent of Code](https://adventofcode.com/) ObjectScript contest.
+## Advent of Code 2022
+
+My solutions for the [Advent of Code](https://adventofcode.com/) ObjectScript 2022 contest.
 
 Season's greetings !
 

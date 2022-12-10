@@ -37,7 +37,7 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
         Set maxStars = 0
         Set curStars = 0
         For {
-            Set:'inputStream.AtEnd stars = inputStream.ReadLine(,.sc)
+            Set:'inputStream.AtEnd stars = $zstrip(inputStream.ReadLine(,.sc),"<>C")
             $$$TOE(sc,sc)
             If stars="" {
                 Set:(curStars>maxStars) maxStars = curStars

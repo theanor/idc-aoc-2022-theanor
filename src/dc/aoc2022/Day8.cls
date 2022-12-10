@@ -149,7 +149,6 @@ ClassMethod Part1(ByRef grid, rowCnt As %Integer, colCnt As %Integer) As %Status
     Set sc = $$$OK
     Try {   
         Set tot = 0
-        Set maxScore = 0
         For i=1:1:rowCnt {
             For j=1:1:colCnt {
                 Set tot = tot +..IsVisible(.grid,rowCnt,colCnt,i,j)
@@ -165,9 +164,6 @@ ClassMethod Part1(ByRef grid, rowCnt As %Integer, colCnt As %Integer) As %Status
 
 ClassMethod Part2(ByRef grid, rowCnt As %Integer, colCnt As %Integer) As %Status
 {
-    #Dim line as %String
-
-    #Dim curdir as %String
     #Dim maxScore,i,j,score as %Integer
 
     Set sc = $$$OK

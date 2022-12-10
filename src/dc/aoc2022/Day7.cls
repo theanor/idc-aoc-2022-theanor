@@ -28,7 +28,7 @@ ClassMethod SizeDirs(inputStream As %Stream.Object, ByRef fs As %Integer) As %St
 
     #Dim line as %String
 
-    #Dim curdir,totdir,cmdline,cmd,arg,fname As %String
+    #Dim curdir,totdir,cmdline,cmd,arg As %String
     #Dim size as %Integer
 
     s fs = ""
@@ -110,8 +110,7 @@ Parameter MINFREE = 30000000;
 
 ClassMethod Part2(inputStream As %Stream.Object) As %Status
 {
-    #Dim line as %String
-
+    
     #Dim curdir as %String
     #Dim tofree,free,mindir as %Integer
 

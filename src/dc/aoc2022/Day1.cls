@@ -111,7 +111,6 @@ ClassMethod Part2Mumps(inputStream As %Stream.Object) As %Status
 
     #Dim stars,curStars,totalStars as %Integer
     #Dim maxStars as %Boolean
-    #Dim i as %Integer
     
     Set sc = $$$OK
     Try {

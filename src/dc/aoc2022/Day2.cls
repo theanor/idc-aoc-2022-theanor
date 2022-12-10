@@ -27,7 +27,7 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
     #Dim sc as %Status
     #Dim ex as %Exception.AbstractException
 
-    #Dim moves,opMove,myMove as %String
+    #Dim opMove,myMove as %String
     #Dim score,totalScore as %Integer
    
     Set sc = $$$OK

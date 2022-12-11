@@ -2,7 +2,7 @@
 
 My solutions for the [Advent of Code](https://adventofcode.com/) ObjectScript 2022 contest.
 
-🎄 Season's greetings 🎄
+🎄 Season's greetings
 
 This is my first AoC, please bear patience.
 

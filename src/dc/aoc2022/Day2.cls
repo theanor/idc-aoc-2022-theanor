@@ -8,18 +8,18 @@ ClassMethod Run(fileName As %String = "input2.txt") As %Status
 
     #Dim inputStream as %Stream.Object
     
-    Set sc = $$$OK
-    Try {
-        Set inputStream = ..GetInputStream(fileName,.sc)
+    set sc = $$$OK
+    try {
+        set inputStream = ..GetInputStream(fileName,.sc)
         $$$TOE(sc,sc)
         $$$TOE(sc,..Part1(inputStream))
         $$$TOE(sc,inputStream.Rewind())
         $$$TOE(sc,..Part2(inputStream))
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 ClassMethod Part1(inputStream As %Stream.Object) As %Status
@@ -30,31 +30,31 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
     #Dim opMove,myMove as %String
     #Dim score,totalScore as %Integer
    
-    Set sc = $$$OK
-    Set totalScore = 0
-    Set moveScore("X")=1
-    Set moveScore("Y")=2
-    Set moveScore("Z")=3
-    Set matchScore("A","X") = 3
-    Set matchScore("B","Y") = 3
-    Set matchScore("C","Z") = 3
-    Set matchScore("A","Y") = 6
-    Set matchScore("B","Z") = 6
-    Set matchScore("C","X") = 6
-    Try {
-        While 'inputStream.AtEnd {
-            Set line = inputStream.ReadLine(,.sc)
+    set sc = $$$OK
+    set totalScore = 0
+    set moveScore("X")=1
+    set moveScore("Y")=2
+    set moveScore("Z")=3
+    set matchScore("A","X") = 3
+    set matchScore("B","Y") = 3
+    set matchScore("C","Z") = 3
+    set matchScore("A","Y") = 6
+    set matchScore("B","Z") = 6
+    set matchScore("C","X") = 6
+    try {
+        while 'inputStream.AtEnd {
+            set line = inputStream.ReadLine(,.sc)
             $$$TOE(sc,sc)
             $$$TOE(sc,..ParseInputLine(line,.opMove,.myMove))
-            Set score = $GET(moveScore(myMove),0)+$GET(matchScore(opMove,myMove),0)
-            Set totalScore = totalScore+score
+            set score = $get(moveScore(myMove),0)+$get(matchScore(opMove,myMove),0)
+            set totalScore = totalScore+score
         }
-        Write !,"Part 1 answer : ",totalScore
+        write !,"Part 1 answer : ",totalScore
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 ClassMethod Part2(inputStream As %Stream.Object) As %Status
@@ -65,41 +65,41 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
     #Dim moves,opMove,myMove as %String
     #Dim score,totalScore as %Integer
    
-    Set sc = $$$OK
-    Set totalScore = 0
-    Set moveScore("X")=1
-    Set moveScore("Y")=2
-    Set moveScore("Z")=3
-    Set matchScore("A","X") = 3
-    Set matchScore("B","Y") = 3
-    Set matchScore("C","Z") = 3
-    Set matchScore("A","Y") = 6
-    Set matchScore("B","Z") = 6
-    Set matchScore("C","X") = 6
-    Set moves("A","X") = "Z"
-    Set moves("A","Y") = "X"
-    Set moves("A","Z") = "Y"
-    Set moves("B","X") = "X"
-    Set moves("B","Y") = "Y"
-    Set moves("B","Z") = "Z"
-    Set moves("C","X") = "Y"
-    Set moves("C","Y") = "Z"
-    Set moves("C","Z") = "X"
-    Try {
-        While 'inputStream.AtEnd {
-            Set line = inputStream.ReadLine(,.sc)
+    set sc = $$$OK
+    set totalScore = 0
+    set moveScore("X")=1
+    set moveScore("Y")=2
+    set moveScore("Z")=3
+    set matchScore("A","X") = 3
+    set matchScore("B","Y") = 3
+    set matchScore("C","Z") = 3
+    set matchScore("A","Y") = 6
+    set matchScore("B","Z") = 6
+    set matchScore("C","X") = 6
+    set moves("A","X") = "Z"
+    set moves("A","Y") = "X"
+    set moves("A","Z") = "Y"
+    set moves("B","X") = "X"
+    set moves("B","Y") = "Y"
+    set moves("B","Z") = "Z"
+    set moves("C","X") = "Y"
+    set moves("C","Y") = "Z"
+    set moves("C","Z") = "X"
+    try {
+        while 'inputStream.AtEnd {
+            set line = inputStream.ReadLine(,.sc)
             $$$TOE(sc,sc)
             $$$TOE(sc,..ParseInputLine(line,.opMove,.expEnd))
-            Set myMove = moves(opMove,expEnd)
-            Set score = $GET(moveScore(myMove),0)+$GET(matchScore(opMove,myMove),0)
-            Set totalScore = totalScore+score
+            set myMove = moves(opMove,expEnd)
+            set score = $get(moveScore(myMove),0)+$get(matchScore(opMove,myMove),0)
+            set totalScore = totalScore+score
         }
-        Write !,"Part 2 answer : ",totalScore
+        write !,"Part 2 answer : ",totalScore
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 ClassMethod ParseInputLine(line As %String, ByRef opponentMove As %String(MAXLEN=1), ByRef move As %String(MAXLEN=1)) As %Status
@@ -107,18 +107,18 @@ ClassMethod ParseInputLine(line As %String, ByRef opponentMove As %String(MAXLEN
     #Dim sc as %Status
     #Dim ex as %Exception.AbstractException
     
-    Set sc = $$$OK
-    Try {
-      Set opponentMove = $ZSTRIP($PIECE(line," ",1),"<>C")
-      Set move = $ZSTRIP($PIECE(line," ",2),"<>C")
-      If ('("ABC" [ opponentMove)) || ('("XYZ" [ move)) || ($LENGTH(opponentMove) '= 1) || ($LENGTH(move) '= 1) {
-        Throw ##class(%Exception.General).%New("invalid input line : """_line_"""")
+    set sc = $$$OK
+    try {
+      set opponentMove = $zstrip($piece(line," ",1),"<>C")
+      set move = $zstrip($piece(line," ",2),"<>C")
+      if ('("ABC" [ opponentMove)) || ('("XYZ" [ move)) || ($length(opponentMove) '= 1) || ($length(move) '= 1) {
+        throw ##class(%Exception.General).%New("invalid input line : """_line_"""")
       }
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Quit sc
+    quit sc
 }
 
 }

@@ -7,18 +7,18 @@ ClassMethod Run(fileName As %String = "input6.txt") As %Status
     #Dim ex 
     #Dim inputStream as %Stream.Object
     
-    Set sc = $$$OK
-    Try {
-        Set inputStream = ..GetInputStream(fileName,.sc)
+    set sc = $$$OK
+    try {
+        set inputStream = ..GetInputStream(fileName,.sc)
         $$$TOE(sc,sc)
         $$$TOE(sc,..Part1(inputStream))
         $$$TOE(sc,inputStream.Rewind())
         $$$TOE(sc,..Part2(inputStream))
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 ClassMethod Part1(inputStream As %Stream.Object) As %Status
@@ -29,33 +29,33 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
     #Dim line as %String
 
    
-    Set sc = $$$OK
-    Try {        
-      Set line = inputStream.ReadLine(,.sc)
-      Set line = $ZSTRIP(line,"<>C")
-      Write "Part 1 answer : ",..MarkerPosition(line,4),!
+    set sc = $$$OK
+    try {        
+      set line = inputStream.ReadLine(,.sc)
+      set line = $zstrip(line,"<>C")
+      write "Part 1 answer : ",..MarkerPosition(line,4),!
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 ClassMethod Part2(inputStream As %Stream.Object) As %Status
 {
     #Dim line as %String
 
-    Set sc = $$$OK
-    Try {
-        Set line = inputStream.ReadLine(,.sc)
-        Set line = $ZSTRIP(line,"<>C")        
-        Set p = ..MarkerPosition(line,14)
-        Write "Part 2 answer : ",p,!
+    set sc = $$$OK
+    try {
+        set line = inputStream.ReadLine(,.sc)
+        set line = $zstrip(line,"<>C")        
+        set p = ..MarkerPosition(line,14)
+        write "Part 2 answer : ",p,!
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 ClassMethod MarkerPosition(msg As %String, len As %Integer) As %Integer
@@ -63,33 +63,33 @@ ClassMethod MarkerPosition(msg As %String, len As %Integer) As %Integer
   #Dim p,i,j,l as %Integer
   #Dim buf as %String
 
-  Set p = 1
-  Set buf = ""
-  Set j=0
+  set p = 1
+  set buf = ""
+  set j=0
 
-  Set l = $LENGTH(msg)
-  While (p <= l) {
-    Set c = $EXTRACT(msg,p,p)                    
-    Set buf = buf_c
-    If $LENGTH(buf) = len {
-      Set i = 1                    
-      While (i < len) {
-        Set c = $EXTRACT(buf,i,i)
-        Set j = i+1                        
-        While (j <= len) {
-         Set d = $EXTRACT(buf,j,j)
-         Quit:c=d                            
-         Set j = j +1
+  set l = $length(msg)
+  while (p <= l) {
+    set c = $extract(msg,p,p)                    
+    set buf = buf_c
+    if $length(buf) = len {
+      set i = 1                    
+      while (i < len) {
+        set c = $extract(buf,i,i)
+        set j = i+1                        
+        while (j <= len) {
+         set d = $extract(buf,j,j)
+         quit:c=d                            
+         set j = j +1
         }   
-        Quit:c=d                     
-        Set i = i+1
+        quit:c=d                     
+        set i = i+1
       }      
-      Quit:i=len
-      Set buf = $EXTRACT(buf,2,len)
+      quit:i=len
+      set buf = $extract(buf,2,len)
     }                                
-    Set p = p + 1
+    set p = p + 1
   }            
-  Return p
+  return p
 }
 
 }

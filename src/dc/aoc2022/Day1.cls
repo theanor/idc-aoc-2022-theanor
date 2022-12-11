@@ -8,9 +8,9 @@ ClassMethod Run(fileName As %String = "input1.txt") As %Status
 
     #Dim inputStream as %Stream.Object
     
-    Set sc = $$$OK
-    Try {
-        Set inputStream = ..GetInputStream(fileName,.sc)
+    set sc = $$$OK
+    try {
+        set inputStream = ..GetInputStream(fileName,.sc)
         $$$TOE(sc,sc)
         $$$TOE(sc,..Part1(inputStream))
         $$$TOE(sc,inputStream.Rewind())
@@ -18,10 +18,10 @@ ClassMethod Run(fileName As %String = "input1.txt") As %Status
         $$$TOE(sc,inputStream.Rewind())
         $$$TOE(sc,..Part2Mumps(inputStream))
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 ClassMethod Part1(inputStream As %Stream.Object) As %Status
@@ -31,28 +31,28 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
 
     #Dim stars,curStars,maxStars as %Integer
     
-    Set sc = $$$OK
-    Try {
+    set sc = $$$OK
+    try {
 
-        Set maxStars = 0
-        Set curStars = 0
-        For {
-            Set:'inputStream.AtEnd stars = $zstrip(inputStream.ReadLine(,.sc),"<>C")
+        set maxStars = 0
+        set curStars = 0
+        for {
+            set:'inputStream.AtEnd stars = $zstrip(inputStream.ReadLine(,.sc),"<>C")
             $$$TOE(sc,sc)
-            If stars="" {
-                Set:(curStars>maxStars) maxStars = curStars
-                Set curStars = 0
-            } Else {
-                Set curStars = curStars + stars
+            if stars="" {
+                set:(curStars>maxStars) maxStars = curStars
+                set curStars = 0
+            } else {
+                set curStars = curStars + stars
             }
-            Quit:inputStream.AtEnd
+            quit:inputStream.AtEnd
         }
-        Write !,"Part 1 answer : ",maxStars
+        write !,"Part 1 answer : ",maxStars
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 ClassMethod Part2Algol(inputStream As %Stream.Object) As %Status
@@ -65,42 +65,42 @@ ClassMethod Part2Algol(inputStream As %Stream.Object) As %Status
     #Dim maxStars as %Integer
     #Dim i as %Integer
     
-    Set sc = $$$OK
-    Try {
-        Set curStars = 0
-        Set maxStars(1) = 0
-        Set maxStars(2) = 0
-        Set maxStars(3) = 0
-        Set stars = ""
-        While(1) {
-            Set:'inputStream.AtEnd stars = inputStream.ReadLine(,.sc)
+    set sc = $$$OK
+    try {
+        set curStars = 0
+        set maxStars(1) = 0
+        set maxStars(2) = 0
+        set maxStars(3) = 0
+        set stars = ""
+        while(1) {
+            set:'inputStream.AtEnd stars = inputStream.ReadLine(,.sc)
             $$$TOE(sc,sc)
-            If (stars="") {
-                Set i = 1
-                While (i <= 3) && (curStars <= maxStars(i)) {
-                    Set i = i + 1
+            if (stars="") {
+                set i = 1
+                while (i <= 3) && (curStars <= maxStars(i)) {
+                    set i = i + 1
                 }                                
-                Set j = 3
-                While (j > i) {                    
-                    Set maxStars(j) = maxStars(j-1)
-                    Set j = j - 1
+                set j = 3
+                while (j > i) {                    
+                    set maxStars(j) = maxStars(j-1)
+                    set j = j - 1
                 }
-                Set maxStars(i) = curStars
-                Quit:inputStream.AtEnd
-                Set curStars = 0                
-            } Else {
-                Set curStars = curStars + stars
+                set maxStars(i) = curStars
+                quit:inputStream.AtEnd
+                set curStars = 0                
+            } else {
+                set curStars = curStars + stars
             }
-            Set stars = ""
+            set stars = ""
         }
-        Set totalStars = 0
-        For i = 1:1:3 Set totalStars = totalStars + maxStars(i)
-        Write !,"Part 2 algol style answer : ",totalStars
+        set totalStars = 0
+        for i = 1:1:3 set totalStars = totalStars + maxStars(i)
+        write !,"Part 2 algol style answer : ",totalStars
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 ClassMethod Part2Mumps(inputStream As %Stream.Object) As %Status
@@ -112,37 +112,37 @@ ClassMethod Part2Mumps(inputStream As %Stream.Object) As %Status
     #Dim stars,curStars,totalStars as %Integer
     #Dim maxStars as %Boolean
     
-    Set sc = $$$OK
-    Try {
-        Set curStars = 0
-        Set stars = ""
-        For {
-            Set:'inputStream.AtEnd stars = inputStream.ReadLine(,.sc)
+    set sc = $$$OK
+    try {
+        set curStars = 0
+        set stars = ""
+        for {
+            set:'inputStream.AtEnd stars = inputStream.ReadLine(,.sc)
             $$$TOE(sc,sc)
-            If (stars="") {
-                Set maxStars(curStars)=1
-                Quit:inputStream.AtEnd
-                Set curStars = 0                
-            } Else {
-                Set curStars = curStars + stars
+            if (stars="") {
+                set maxStars(curStars)=1
+                quit:inputStream.AtEnd
+                set curStars = 0                
+            } else {
+                set curStars = curStars + stars
             }
-            Set stars = ""
+            set stars = ""
         }
-        Set stars=""
-        Set stars =$ORDER(maxStars(stars),-1)
-        Set totalStars = 0
-        Set cnt=0
-        While (stars '= "") && (cnt < 3) {
-          Set totalStars = totalStars + stars
-          Set cnt=cnt+1
-          Set stars = $ORDER(maxStars(stars),-1)
+        set stars=""
+        set stars =$order(maxStars(stars),-1)
+        set totalStars = 0
+        set cnt=0
+        while (stars '= "") && (cnt < 3) {
+          set totalStars = totalStars + stars
+          set cnt=cnt+1
+          set stars = $order(maxStars(stars),-1)
         }
-        Write !,"Part 2 mumps style answer : ",totalStars
+        write !,"Part 2 mumps style answer : ",totalStars
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 }

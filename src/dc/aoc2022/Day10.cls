@@ -8,16 +8,16 @@ ClassMethod Run(fileName As %String = "input10.txt") As %Status
 
     #Dim inputStream as %Stream.Object
     
-    Set sc = $$$OK
-    Try {
-        Set inputStream = ..GetInputStream(fileName,.sc)
+    set sc = $$$OK
+    try {
+        set inputStream = ..GetInputStream(fileName,.sc)
         $$$TOE(sc,sc)
         $$$TOE(sc,..Part1And2(inputStream))
       }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 ClassMethod Part1And2(inputStream As %Stream.Object) As %Status
@@ -33,42 +33,42 @@ ClassMethod Part1And2(inputStream As %Stream.Object) As %Status
     #Dim opcode as %String
     #Dim arg as %Integer
    
-    Set sc = $$$OK
-    Try {
-        Set total = 0
-        Set X = 1
-        Set clk = 1
-        While 'inputStream.AtEnd {
+    set sc = $$$OK
+    try {
+        set total = 0
+        set X = 1
+        set clk = 1
+        while 'inputStream.AtEnd {
 
-            Set line = inputStream.ReadLine(,.sc)
-            Set line = $ZSTRIP(line,"<>C")
+            set line = inputStream.ReadLine(,.sc)
+            set line = $zstrip(line,"<>C")
 
-            Set opcode = $PIECE(line," ",1)
-            Set arg = $PIECE(line, " ",2)
-            Set dur = $CASE(opcode,"noop":1,"addx":2,:0)
+            set opcode = $piece(line," ",1)
+            set arg = $piece(line, " ",2)
+            set dur = $case(opcode,"noop":1,"addx":2,:0)
 
-            While dur > 0 {
+            while dur > 0 {
 
-              Set pos = (clk-1) # 40              
-              Set px = $SELECT((pos>=(X-1))&&(pos<=(X+1)):"#",1:".")
-              Write px
-              Write:(pos=39) !
+              set pos = (clk-1) # 40              
+              set px = $select((pos>=(X-1))&&(pos<=(X+1)):"#",1:".")
+              write px
+              write:(pos=39) !
 
-              Set:((clk-20)#40)=0 total = total + (clk*X)
+              set:((clk-20)#40)=0 total = total + (clk*X)
               
-              Set clk = clk+1
-              Set dur = dur-1               
+              set clk = clk+1
+              set dur = dur-1               
             }            
-            If opcode="addx" {
-              Set X = X+arg
+            if opcode="addx" {
+              set X = X+arg
             }
         }
-        Write "Part 1 answer : ",total,!
+        write "Part 1 answer : ",total,!
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 }

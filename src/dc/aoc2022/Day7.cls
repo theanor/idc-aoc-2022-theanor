@@ -7,18 +7,18 @@ ClassMethod Run(fileName As %String = "input7.txt") As %Status
     #Dim ex 
     #Dim inputStream as %Stream.Object
     
-    Set sc = $$$OK
-    Try {
-        Set inputStream = ..GetInputStream(fileName,.sc)
+    set sc = $$$OK
+    try {
+        set inputStream = ..GetInputStream(fileName,.sc)
         $$$TOE(sc,sc)
         $$$TOE(sc,..Part1(inputStream))
         $$$TOE(sc,inputStream.Rewind())
         $$$TOE(sc,..Part2(inputStream))
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 ClassMethod SizeDirs(inputStream As %Stream.Object, ByRef fs As %Integer) As %Status
@@ -31,47 +31,47 @@ ClassMethod SizeDirs(inputStream As %Stream.Object, ByRef fs As %Integer) As %St
     #Dim curdir,totdir,cmdline,cmd,arg As %String
     #Dim size as %Integer
 
-    Set fs = ""
-    Set curdir="."
-    Try {        
-        While 'inputStream.AtEnd {
-          Set line = inputStream.ReadLine(,.sc)
-          Set line = $ZSTRIP(line,"<>C")    
-          If ($EXTRACT(line,1,1) = "$") { // command prompt
-            Set cmdline = $EXTRACT(line,3,*)
-            Set cmd = $PIECE(cmdline," ",1)
-            Set arg = $PIECE(cmdline," ",2)
-            If cmd="cd" {
-              If arg="/" {
-                Set curdir = "."
-              } ElseIf arg=".." {
-                Set curdir = $PIECE(curdir,"/",1,*-1)
-              } Else {
-                Set curdir = $GET(curdir)_"/"_arg
+    set fs = ""
+    set curdir="."
+    try {        
+        while 'inputStream.AtEnd {
+          set line = inputStream.ReadLine(,.sc)
+          set line = $zstrip(line,"<>C")    
+          if ($extract(line,1,1) = "$") { // command prompt
+            set cmdline = $extract(line,3,*)
+            set cmd = $piece(cmdline," ",1)
+            set arg = $piece(cmdline," ",2)
+            if cmd="cd" {
+              if arg="/" {
+                set curdir = "."
+              } elseif arg=".." {
+                set curdir = $piece(curdir,"/",1,*-1)
+              } else {
+                set curdir = $get(curdir)_"/"_arg
               }
-            } ElseIf cmd="ls" {
+            } elseif cmd="ls" {
               // ignore 
             }
-          } Else {
-            Set size = $PIECE(line," ",1)
+          } else {
+            set size = $piece(line," ",1)
             // ignore file name s fname = $piece(line," ",2)
-            If size="dir" {
+            if size="dir" {
               // ignore
-            } Else {
-              Set totdir = curdir
-              While(totdir '= ".") {
-                Set fs(totdir) = $GET(fs(totdir),0)+size+0
-                Set totdir = $PIECE(totdir,"/",1,*-1)
+            } else {
+              set totdir = curdir
+              while(totdir '= ".") {
+                set fs(totdir) = $get(fs(totdir),0)+size+0
+                set totdir = $piece(totdir,"/",1,*-1)
               }                
-              Set fs(totdir) = $GET(fs(totdir),0)+size
+              set fs(totdir) = $get(fs(totdir),0)+size
             }            
           }
         } 
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 ClassMethod Part1(inputStream As %Stream.Object) As %Status
@@ -85,23 +85,23 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
     #Dim total as %Integer
 
    
-    Set sc = $$$OK
-    Try {        
+    set sc = $$$OK
+    try {        
         $$$TOE(sc,..SizeDirs(inputStream,.fs))
-        Set curdir = $ORDER(fs(""))
-        Set total=0
-        While curdir '= "" {
-          If fs(curdir) <= 100000 {
-            Set total = total + fs(curdir)
+        set curdir = $order(fs(""))
+        set total=0
+        while curdir '= "" {
+          if fs(curdir) <= 100000 {
+            set total = total + fs(curdir)
           }
-          Set curdir = $ORDER(fs(curdir))
+          set curdir = $order(fs(curdir))
         }
-        Write "Part 1 answer : ",total,!
+        write "Part 1 answer : ",total,!
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 Parameter TOTALSIZE = 70000000;
@@ -114,27 +114,27 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
     #Dim curdir as %String
     #Dim tofree,free,mindir as %Integer
 
-    Set sc = $$$OK
+    set sc = $$$OK
 
-    Try {
+    try {
         $$$TOE(sc,..SizeDirs(inputStream,.fs))        
-        Set curdir = $ORDER(fs(""))
-        Set free = ..#TOTALSIZE-fs(".")
-        Set tofree = ..#MINFREE - free
-        Set mindir = ..#TOTALSIZE
-        While curdir '= "" {
-          If (fs(curdir) >= tofree) && (fs(curdir) < mindir) {
-            Set mindir = fs(curdir)
+        set curdir = $order(fs(""))
+        set free = ..#TOTALSIZE-fs(".")
+        set tofree = ..#MINFREE - free
+        set mindir = ..#TOTALSIZE
+        while curdir '= "" {
+          if (fs(curdir) >= tofree) && (fs(curdir) < mindir) {
+            set mindir = fs(curdir)
       
           }
-          Set curdir = $ORDER(fs(curdir))
+          set curdir = $order(fs(curdir))
         }
-        Write "Part 2 answer : ",mindir,!
+        write "Part 2 answer : ",mindir,!
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 }

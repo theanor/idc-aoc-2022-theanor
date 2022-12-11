@@ -7,61 +7,61 @@ ClassMethod Run(fileName As %String = "input8.txt") As %Status
     #Dim ex 
     #Dim inputStream as %Stream.Object
     
-    Set sc = $$$OK
-    Try {
-        Set inputStream = ..GetInputStream(fileName,.sc)
+    set sc = $$$OK
+    try {
+        set inputStream = ..GetInputStream(fileName,.sc)
         $$$TOE(sc,sc)
         $$$TOE(sc,..BuildGrid(inputStream,.grid,.rowCnt,.colCnt))        
         $$$TOE(sc,..Part1(.grid,rowCnt,colCnt))
         $$$TOE(sc,..Part2(.grid,rowCnt,colCnt))
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 ClassMethod IsVisible(ByRef grid, rowCnt As %Integer, colCnt As %Integer, row As %Integer, col As %Integer) As %Boolean
 {
     #Dim height,l,r,t,b as %Integer
 
-    If (row=1) || (row = rowCnt) || (col = 1) || (col=colCnt) Return 1
+    if (row=1) || (row = rowCnt) || (col = 1) || (col=colCnt) return 1
    
-    Set height = grid(row,col)
+    set height = grid(row,col)
 
-    Set l = 0
-    For i=1:1:col-1 {
-      If grid(row,i) >= height {
-          Set l = 1
-          Quit
+    set l = 0
+    for i=1:1:col-1 {
+      if grid(row,i) >= height {
+          set l = 1
+          quit
       }        
     }    
 
-    Set r  = 0
-    For i=col+1:1:colCnt {
-      If grid(row,i) >= height {
-          Set r  = 1
-          Quit
+    set r  = 0
+    for i=col+1:1:colCnt {
+      if grid(row,i) >= height {
+          set r  = 1
+          quit
       }        
     }    
 
-    Set t=0
-    For j=1:1:row-1 {
-      If grid(j,col) >= height {
-          Set t=1
-          Quit
+    set t=0
+    for j=1:1:row-1 {
+      if grid(j,col) >= height {
+          set t=1
+          quit
       }
     }
 
-    Set b=0
-    For j=row+1:1:rowCnt {
-      If grid(j,col) >= height {
-         Set b=1
-         Quit
+    set b=0
+    for j=row+1:1:rowCnt {
+      if grid(j,col) >= height {
+         set b=1
+         quit
       }
     }
 
-    Return 'l || 'r || 't || 'b
+    return 'l || 'r || 't || 'b
 }
 
 ClassMethod Score(ByRef grid, rowCnt As %Integer, colCnt As %Integer, row As %Integer, col As %Integer) As %Integer
@@ -73,40 +73,40 @@ ClassMethod Score(ByRef grid, rowCnt As %Integer, colCnt As %Integer, row As %In
     #Dim ht as %Integer
     #Dim i as %Integer
     
-    Try {
-        If (row=1) || (row = rowCnt) || (col = 1) || (col=colCnt) Return 0
+    try {
+        if (row=1) || (row = rowCnt) || (col = 1) || (col=colCnt) return 0
 
-        Set lvd=0
-        Set ht = grid(row,col)    
-        For i=col-1:-1:1 {
-           Set lvd=lvd+1
-           Quit:grid(row,i)>=ht
+        set lvd=0
+        set ht = grid(row,col)    
+        for i=col-1:-1:1 {
+           set lvd=lvd+1
+           quit:grid(row,i)>=ht
         }
-        Set rvd = 0
-        Set ht = grid(row,col)
-        For i=col+1:1:colCnt {
-           Set rvd = rvd+1 
-           Quit:grid(row,i)>=ht
+        set rvd = 0
+        set ht = grid(row,col)
+        for i=col+1:1:colCnt {
+           set rvd = rvd+1 
+           quit:grid(row,i)>=ht
         }
-        Set tvd = 0
-        Set ht = grid(row,col)
-        For i=row-1:-1:1 {
-            Set tvd=tvd+1
-            Quit:grid(i,col)>=ht
+        set tvd = 0
+        set ht = grid(row,col)
+        for i=row-1:-1:1 {
+            set tvd=tvd+1
+            quit:grid(i,col)>=ht
         }
 
-        Set bvd = 0
-        Set ht = grid(row,col)
-        For i = row+1:1:rowCnt {
-            Set bvd = bvd+1
-            Quit:grid(i,col)>=ht
+        set bvd = 0
+        set ht = grid(row,col)
+        for i = row+1:1:rowCnt {
+            set bvd = bvd+1
+            quit:grid(i,col)>=ht
         }
-        Return lvd*rvd*tvd*bvd
+        return lvd*rvd*tvd*bvd
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Quit sc
+    quit sc
 }
 
 ClassMethod BuildGrid(inputStream As %Stream.Object, ByRef grid, ByRef rowCnt As %Integer, ByRef colCnt As %Integer) As %Status
@@ -117,25 +117,25 @@ ClassMethod BuildGrid(inputStream As %Stream.Object, ByRef grid, ByRef rowCnt As
     #Dim line as %String
     #Dim i as %Integer
 
-    Set sc = $$$OK
-    Try {
-        Set rowCnt = 0     
-        Set colCnt = 0
-        Set grid = 0
-        While 'inputStream.AtEnd {
-            Set line = inputStream.ReadLine(,.sc)
-            Set line = $ZSTRIP(line,"<>C")
-            Set rowCnt = rowCnt + 1
-            Set colCnt = $LENGTH(line)
-            For i=1:1:colCnt {                                
-                Set grid(rowCnt,i)=$EXTRACT(line,i,i)
+    set sc = $$$OK
+    try {
+        set rowCnt = 0     
+        set colCnt = 0
+        set grid = 0
+        while 'inputStream.AtEnd {
+            set line = inputStream.ReadLine(,.sc)
+            set line = $zstrip(line,"<>C")
+            set rowCnt = rowCnt + 1
+            set colCnt = $length(line)
+            for i=1:1:colCnt {                                
+                set grid(rowCnt,i)=$extract(line,i,i)
             }        
         }
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Quit sc
+    quit sc
 }
 
 ClassMethod Part1(ByRef grid, rowCnt As %Integer, colCnt As %Integer) As %Status
@@ -146,42 +146,42 @@ ClassMethod Part1(ByRef grid, rowCnt As %Integer, colCnt As %Integer) As %Status
     #Dim tot,i,j As %Integer
 
        
-    Set sc = $$$OK
-    Try {   
-        Set tot = 0
-        For i=1:1:rowCnt {
-            For j=1:1:colCnt {
-                Set tot = tot +..IsVisible(.grid,rowCnt,colCnt,i,j)
+    set sc = $$$OK
+    try {   
+        set tot = 0
+        for i=1:1:rowCnt {
+            for j=1:1:colCnt {
+                set tot = tot +..IsVisible(.grid,rowCnt,colCnt,i,j)
             }
         }
-        Write "Part 1 answer : ",tot,!
+        write "Part 1 answer : ",tot,!
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 ClassMethod Part2(ByRef grid, rowCnt As %Integer, colCnt As %Integer) As %Status
 {
     #Dim maxScore,i,j,score as %Integer
 
-    Set sc = $$$OK
+    set sc = $$$OK
 
-    Try {
-        Set maxScore = 0
-        For i=1:1:rowCnt {
-            For j=1:1:colCnt {
-                Set score = ..Score(.grid,rowCnt,colCnt,i,j)
-                Set:score>maxScore maxScore = score
+    try {
+        set maxScore = 0
+        for i=1:1:rowCnt {
+            for j=1:1:colCnt {
+                set score = ..Score(.grid,rowCnt,colCnt,i,j)
+                set:score>maxScore maxScore = score
             }
         }
-        Write "Part 2 answer : ",maxScore,!
+        write "Part 2 answer : ",maxScore,!
     }
-    Catch (ex) {
-      Set sc = ex.AsStatus()
+    catch (ex) {
+      set sc = ex.AsStatus()
     }
-    Return sc
+    return sc
 }
 
 }

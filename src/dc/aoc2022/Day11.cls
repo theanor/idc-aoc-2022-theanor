@@ -23,7 +23,7 @@ ClassMethod Run(fileName As %String = "input11.txt") As %Status
         merge monkeys2=monkeys1
 
         // part 1 : manage worry level by dividing it by 3, run monkey business for 20 rounds
-        $$$TOE(sc,..RunMonkeyBusiness(.monkeys1,monkeyCnt,"new \ 3",20))        
+        $$$TOE(sc,..RunMonkeyBusiness(.monkeys1,monkeyCnt,"newValue \ 3",20))        
         write "Part 1 answer : ",..TopMonkeyBusiness(.monkeys1,monkeyCnt),!
 
 
@@ -37,7 +37,7 @@ ClassMethod Run(fileName As %String = "input11.txt") As %Status
         for mky=0:1:monkeyCnt-1 {
           set relief = relief*monkeys2(mky,"div")
         }
-        set reliefExpr = "new # "_relief
+        set reliefExpr = "newValue # "_relief
         $$$TOE(sc,..RunMonkeyBusiness(.monkeys2,monkeyCnt,reliefExpr,10000))        
         write "Part 2 answer : ",..TopMonkeyBusiness(.monkeys2,monkeyCnt),!
     }
@@ -123,7 +123,7 @@ ClassMethod RunMonkeyBusiness(ByRef monkeys, monkeyCnt As %Integer, reliefExpr A
   #Dim sc as %Status = $$$OK
   #Dim ex as %Exception.AbstractException
 
-  #Dim round,mky,it,old,new as %Integer
+  #Dim round,mky,it,old,newValue as %Integer
   #Dim items as %List
   
   try {
@@ -135,14 +135,14 @@ ClassMethod RunMonkeyBusiness(ByRef monkeys, monkeyCnt As %Integer, reliefExpr A
             for it=1:1:$listlength(items) {
 
               set old = $listget(items,it)
-              set new = old              
+              set newValue = old              
 
-              xecute ("(old,new) set "_monkeys(mky,"fct"), old, .new)                            
-              xecute ("(old,new) set new="_reliefExpr,old,.new)            
+              xecute ("(old,newValue) set "_monkeys(mky,"fct"), old, .newValue)                            
+              xecute ("(old,newValue) set newValue="_reliefExpr,old,.newValue)            
 
-              set dest = $select((new # monkeys(mky,"div"))=0:monkeys(mky,"true"),1:monkeys(mky,"false"))
+              set dest = $select((newValue # monkeys(mky,"div"))=0:monkeys(mky,"true"),1:monkeys(mky,"false"))
 
-              set $list(monkeys(dest,"items"),*+1) = new
+              set $list(monkeys(dest,"items"),*+1) = newValue
               set monkeys(mky,"isp") = monkeys(mky,"isp") + 1
             }
             set monkeys(mky,"items")=""            

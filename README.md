@@ -1,9 +1,13 @@
-## aoc2020-template
-My solutions for the [Advent of Code](https://adventofcode.com/) ObjectScript contest.
+## ❄️ Advent of Code 2022
 
-Season's greetings !
+My solutions for the [Advent of Code](https://adventofcode.com/) ObjectScript 2022 contest.
+
+🎄 Season's greetings
 
 This is my first AoC, please bear patience.
+
+A worflow in this repository triggers [objectscript quality scanner](https://community.objectscriptquality.com/dashboard?id=intersystems_iris_community%2Fidc-aoc-2022-theanor)
+
 ## Prerequisites
 Make sure you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [Docker desktop](https://www.docker.com/products/docker-desktop) installed.
 

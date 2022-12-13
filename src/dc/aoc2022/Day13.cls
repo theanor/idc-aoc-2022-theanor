@@ -23,8 +23,6 @@ ClassMethod Run(fileName As %String = "input13.txt") As %Status
 
 ClassMethod Compare(left, right) As %Integer
 {
-  #Dim ex as %Exception.AbstractException
-
   #Dim result as %Integer
   #Dim minl,i as %Integer
   

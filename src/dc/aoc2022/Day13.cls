@@ -27,28 +27,22 @@ ClassMethod Compare(left, right) As %Integer
 
   #Dim result as %Integer
   #Dim minl,i as %Integer
-  #Dim rv,lv as %DynamicArray
   
-  set sc = $$$OK
-  try {       
-     if $isobject(left) && $isobject(right) {
-      set minl = left.%Size()
-      if right.%Size() < minl set minl = right.%Size()
-      for i=0:1:minl-1 {
-        set result = ..Compare(left.%Get(i),right.%Get(i))
-        return:(result<0) -1
-        return:(result>0) 1
-      }
-      return left.%Size() - right.%Size()
-     } elseif '$isobject(left) && '$isobject(right) {
-      return left - right
-     } elseif $isobject(left) && '$isobject(right) {
-      return ..Compare(left,[(right)])
-     } else {
-      return ..Compare([(left)],right)
-     }
-  } catch (ex) {
-    set sc = ex.AsStatus()
+  if $isobject(left) && $isobject(right) {
+   set minl = left.%Size()
+   if right.%Size() < minl set minl = right.%Size()
+   for i=0:1:minl-1 {
+     set result = ..Compare(left.%Get(i),right.%Get(i))
+     return:(result<0) -1
+     return:(result>0) 1
+   }
+   return left.%Size() - right.%Size()
+  } elseif '$isobject(left) && '$isobject(right) {
+   return left - right
+  } elseif $isobject(left) && '$isobject(right) {
+   return ..Compare(left,[(right)])
+  } else {
+   return ..Compare([(left)],right)
   }
 }
 
@@ -127,6 +121,9 @@ ClassMethod SortPackets(ByRef packets, low As %Integer, high As %Integer)
 
 ClassMethod Part2(inputStream As %Stream.Object) As %Status
 {
+    #Dim sc as %Status
+    #Dim ex 
+
     #Dim line as %String
 
     #Dim packets as %DynamicArray

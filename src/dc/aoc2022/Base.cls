@@ -3,6 +3,8 @@ Class dc.aoc2022.Base
 
 Parameter Folder = "/irisdev/app/data/";
 
+Parameter MAXINT As INTEGER = 9999999;
+
 ClassMethod GetInputStream(fileName As %String, Output sc As %Status) As %Stream.Object
 {
     #Dim ex as %Exception.AbstractException

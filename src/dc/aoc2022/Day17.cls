@@ -135,9 +135,6 @@ ClassMethod AddShape(ByRef grid, ByRef shapes, shape As %Integer, x As %Integer,
 
 ClassMethod IsBlocked(ByRef grid, ByRef shapes, shape As %Integer, x As %Integer, y As %Integer) As %Boolean
 {
-  s w = shapes(shape,"w")
-  s h = shapes(shape,"h")
-
   s blocked = 0
   for sx = 0:1:shapes(shape,"w")-1 {
     for sy = shapes(shape,"h")-1:-1:0 {
@@ -211,8 +208,6 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
 
       d ..BuildShapes(.shapes)
 
-      write "jets=",$length(line),!
-
       s grid("jets") = line
       s grid("jet") = 0
       s grid("h") = 0
@@ -220,8 +215,6 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
       s grid("turn") = 0
 
       s rocks = 1000000000000
-      write "rocks=",rocks,!
-
       
       d ..Iterate(.grid,.shapes,rocks,1)
       s fh = grid("h")
@@ -236,78 +229,16 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
       s cycleTurns = ct-ft
       s cycleCount = (rocks-ft) \ cycleTurns
 
-      write "ft=",ft,!
-      write "cycleHeight=",cycleHeight,!
-      write "cycleTurns=",cycleTurns,!
-      write "cycleCount=",cycleCount,!
-
       s rturns = rocks-(cycleCount*cycleTurns)-ft
-      write "rturns=",rturns,!
 
       d ..Iterate(.grid,.shapes,rturns,0)
 
       s lh = grid("h")-ch
       s lt = grid("turn")-ct
 
-
-      write "lh=",lh,!
-      write "lt=",lt,!
-
-      write ft+(cycleTurns*cycleCount)+rturns,!
-
       s totalHeight = fh+(cycleHeight*cycleCount)+lh
 
       write "Part 2 answer : ",totalHeight,!
-
-      
-
-
-      
-
-      //d ..Iterate(.grid,.shapes,rocks,0)
-      //s lh = grid("h")
-      //s lt = grid("turn")
-
-
-      /*
-      s firstHeight = grid("h")
-      s firstRocks = grid("turn")
-
-      write "firstHeight=",firstHeight,!
-      write "firstRocks=",firstRocks,!
-
-      d ..Iterate(.grid,.shapes,rocks,1)      
-      s cycleHeight = grid("h")-firstHeight
-      s cycleRocks = grid("turn")-firstRocks
-
-
-
-      write "cycleHeight=",cycleHeight,!
-      write "cycleRocks=",cycleRocks,!
-      
-      s cycles = (rocks-firstRocks) \ cycleRocks
-
-      write "cycles=",cycles,!
-
-      s totalRocks = (cycleRocks*cycles)+firstRocks
-      s totalHeight = (cycleHeight*cycles)+firstHeight
-      s exceedRocks = totalRocks-rocks
-      write "exceedRocks=",exceedRocks,!
-
-      d ..Iterate(.grid,.shapes,firstRocks-exceedRocks,0)      
-      
-      s totalHeight = totalHeight-(firstHeight-grid("h"))
- 
-      
-
-      
-
-      //d ..Iterate(.grid,.shapes,lastRocks)
-      // s totalHeight = (cycles*cycleHeight)-
-
-      write "Part 2 answer : ",totalHeight,!
-      */
-
 
     }
     catch (ex) {

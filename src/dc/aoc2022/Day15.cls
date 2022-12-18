@@ -61,7 +61,6 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
 
     #Dim minx,miny,maxx,maxy as %Integer
     #Dim targetY as %Integer
-    #Dim sensors as %Integer
     #Dim x,pcnt as %Integer
 
 
@@ -160,7 +159,6 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
   #Dim sx,sy,bx,by as %Integer
   #Dim radius as %Integer
 
-  #Dim lx,hx,ly,hy as %Integer
   #Dim sensors as %Integer
 
   #Dim dark as %Integer
@@ -170,13 +168,7 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
 
   set sc = $$$OK
   try {        
-
-   set lx = 0
-   set hx = 4000000
-   set ly = 0
-   set hy = 4000000
-
-
+   
    set sensors = 0
 
    while 'inputStream.AtEnd {

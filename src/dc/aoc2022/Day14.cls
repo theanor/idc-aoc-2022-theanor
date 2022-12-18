@@ -34,7 +34,6 @@ ClassMethod DrawScan(ByRef scan)
   while x '= "" {
     set y=$order(scan(x,""))
     while y '= "" {
-      set v = scan(x,y)
       set:x<minx minx=x
       set:x>maxx maxx=x
       set:y<miny miny=y

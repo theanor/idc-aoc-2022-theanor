@@ -234,7 +234,6 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
       d ..Iterate(.grid,.shapes,rturns,0)
 
       s lh = grid("h")-ch
-      s lt = grid("turn")-ct
 
       s totalHeight = fh+(cycleHeight*cycleCount)+lh
 

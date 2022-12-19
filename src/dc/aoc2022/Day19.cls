@@ -11,9 +11,7 @@ ClassMethod Run(fileName As %String = "input19.txt") As %Status
     try {
         set inputStream = ..GetInputStream(fileName,.sc)
         $$$TOE(sc,sc)
-        $$$TOE(sc,..Part1(inputStream))
-        $$$TOE(sc,inputStream.Rewind())
-        $$$TOE(sc,..Part2(inputStream))
+        $$$TOE(sc,..Part1And2(inputStream))
     }
     catch (ex) {
       set sc = ex.AsStatus()
@@ -21,27 +19,18 @@ ClassMethod Run(fileName As %String = "input19.txt") As %Status
     return sc
 }
 
-ClassMethod Part1(inputStream As %Stream.Object) As %Status
+ClassMethod ParseInput(inputStream As %Stream.Object, ByRef blueprints As %DynamicArray) As %Status
 {
-    #Dim sc as %Status
-    #Dim ex as %Exception.AbstractException
-    
-    #Dim line as %String
+  #Dim sc as %Status = $$$OK
+  #Dim ex as %Exception.AbstractException
 
-    #Dim matcher As %Regex.Matcher
-    #Dim blueprints As %DynamicArray
-    #Dim blueprint as %DynamicAbstractObject
-    #Dim i,t as %Integer    
+  #Dim matcher As %Regex.Matcher
+  #Dim blueprint as %DynamicAbstractObject
 
-   
-    set sc = $$$OK
-    try {        
-
+  
+  try {
       set blueprints = []
-
       set matcher = ##class(%Regex.Matcher).%New("Blueprint ([0-9]+): Each ore robot costs ([0-9]+) ore\. Each clay robot costs ([0-9]+) ore\. Each obsidian robot costs ([0-9]+) ore and ([0-9]+) clay\. Each geode robot costs ([0-9]+) ore and ([0-9]+) obsidian\.")            
-
-
       while ('inputStream.AtEnd)
       {
         set line = inputStream.ReadLine(,.sc)
@@ -58,8 +47,29 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
           }
           do blueprints.%Push(blueprint)          
         }
-
       }
+  } catch (ex) {
+    s sc = ex.AsStatus()
+  }
+  q sc
+}
+
+ClassMethod Part1And2(inputStream As %Stream.Object) As %Status
+{
+    #Dim sc as %Status
+    #Dim ex as %Exception.AbstractException
+    
+    #Dim line as %String
+
+    #Dim i,t,p as %Integer    
+
+   
+    set sc = $$$OK
+
+    try {
+      $$$TOE(sc,..ParseInput(inputStream,.blueprints))
+
+      // part 1
 
       set t = 0
       for i=0:1:blueprints.%Size()-1 {
@@ -67,6 +77,16 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
         set t = t + (blueprints.%Get(i).id*..Mine(blueprints.%Get(i),0,0,0,1,0,0,24))
       }
       write "Part 1 answer : ",t,!
+ 
+      // part 2
+
+      set p = 1
+      for i=0:1:2 {
+        write "mining with salvaged blueprint id ",blueprints.%Get(i).id,!
+        set p = p *..Mine(blueprints.%Get(i),0,0,0,1,0,0,32)
+      }
+      write "Part 2 answer : ",p,!
+
     }
     catch (ex) {
       set sc = ex.AsStatus()
@@ -74,7 +94,6 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
     return sc
 }
 
-/// recursive backtracking 
 ClassMethod Mine(costs As %DynamicAbstractObject, ore As %Integer, cla As %Integer, obs As %Integer, oreRbt As %Integer, claRbt As %Integer, obsRbt As %Integer, clk As %Integer) As %Integer
 {
   #Dim result,t as %Integer
@@ -104,60 +123,6 @@ ClassMethod Mine(costs As %DynamicAbstractObject, ore As %Integer, cla As %Integ
     set:result<t result = t
   }
   return result
-}
-
-ClassMethod Part2(inputStream As %Stream.Object) As %Status
-{
-    #Dim line as %String
-
-    #Dim matcher As %Regex.Matcher
-    #Dim blueprints As %DynamicArray
-    #Dim blueprint as %DynamicAbstractObject
-    #Dim i,p as %Integer    
-
-
-    set sc = $$$OK
-    try {        
-
-      set blueprints = []
-
-      set matcher = ##class(%Regex.Matcher).%New("Blueprint ([0-9]+): Each ore robot costs ([0-9]+) ore\. Each clay robot costs ([0-9]+) ore\. Each obsidian robot costs ([0-9]+) ore and ([0-9]+) clay\. Each geode robot costs ([0-9]+) ore and ([0-9]+) obsidian\.")            
-
-
-      set bpCnt=0
-
-      while ('inputStream.AtEnd)
-      {
-        set line = inputStream.ReadLine(,.sc)
-        set line = $zstrip(line,"<>C")
-        if matcher.Match(line) {          
-          set blueprint = {
-            "id" : (matcher.Group(1)+0),
-            "geoOre" : (matcher.Group(6)+0),
-            "geoObs" : (matcher.Group(7)+0),
-            "obsOre" : (matcher.Group(4)+0),
-            "obsCla" : (matcher.Group(5)+0),
-            "oreOre" : (matcher.Group(2)+0),
-            "claOre" : (matcher.Group(3)+0)
-          }
-          do blueprints.%Push(blueprint)          
-          set bpCnt = bpCnt+1
-          quit:bpCnt>=3
-        }
-      }
-
-      set p = 1
-      for i=0:1:blueprints.%Size()-1 {
-        write "mining with salvaged blueprint id ",blueprints.%Get(i).id,!
-        set p = p *..Mine(blueprints.%Get(i),0,0,0,1,0,0,32)
-      }
-
-      write "Part 2 answer : ",p,!
-    }
-    catch (ex) {
-      set sc = ex.AsStatus()
-    }
-    return sc
 }
 
 }

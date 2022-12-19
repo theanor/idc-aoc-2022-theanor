@@ -28,11 +28,16 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
     
     #Dim line as %String
 
+    #Dim matcher As %Regex.Matcher
+    #Dim blueprints As %DynamicArray
+    #Dim blueprint as %DynamicAbstractObject
+    #Dim i,t as %Integer    
+
    
     set sc = $$$OK
     try {        
 
-      set bluePrints = []
+      set blueprints = []
 
       set matcher = ##class(%Regex.Matcher).%New("Blueprint ([0-9]+): Each ore robot costs ([0-9]+) ore\. Each clay robot costs ([0-9]+) ore\. Each obsidian robot costs ([0-9]+) ore and ([0-9]+) clay\. Each geode robot costs ([0-9]+) ore and ([0-9]+) obsidian\.")            
 
@@ -51,15 +56,15 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
             "oreOre" : (matcher.Group(2)+0),
             "claOre" : (matcher.Group(3)+0)
           }
-          do bluePrints.%Push(blueprint)          
+          do blueprints.%Push(blueprint)          
         }
 
       }
 
       set t = 0
-      for i=0:1:bluePrints.%Size()-1 {
-        write "mining with blueprint id ",bluePrints.%Get(i).id,!
-        set t = t + (bluePrints.%Get(i).id*..Mine(bluePrints.%Get(i),0,0,0,1,0,0,24))
+      for i=0:1:blueprints.%Size()-1 {
+        write "mining with blueprint id ",blueprints.%Get(i).id,!
+        set t = t + (blueprints.%Get(i).id*..Mine(blueprints.%Get(i),0,0,0,1,0,0,24))
       }
       write "Part 1 answer : ",t,!
     }
@@ -72,6 +77,8 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
 /// recursive backtracking 
 ClassMethod Mine(costs As %DynamicAbstractObject, ore As %Integer, cla As %Integer, obs As %Integer, oreRbt As %Integer, claRbt As %Integer, obsRbt As %Integer, clk As %Integer) As %Integer
 {
+  #Dim result,t as %Integer
+
   return:clk<=0 0
 
   // mine geodes
@@ -103,10 +110,16 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
 {
     #Dim line as %String
 
+    #Dim matcher As %Regex.Matcher
+    #Dim blueprints As %DynamicArray
+    #Dim blueprint as %DynamicAbstractObject
+    #Dim i,p as %Integer    
+
+
     set sc = $$$OK
     try {        
 
-      set bluePrints = []
+      set blueprints = []
 
       set matcher = ##class(%Regex.Matcher).%New("Blueprint ([0-9]+): Each ore robot costs ([0-9]+) ore\. Each clay robot costs ([0-9]+) ore\. Each obsidian robot costs ([0-9]+) ore and ([0-9]+) clay\. Each geode robot costs ([0-9]+) ore and ([0-9]+) obsidian\.")            
 
@@ -127,16 +140,16 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
             "oreOre" : (matcher.Group(2)+0),
             "claOre" : (matcher.Group(3)+0)
           }
-          do bluePrints.%Push(blueprint)          
+          do blueprints.%Push(blueprint)          
           set bpCnt = bpCnt+1
           quit:bpCnt>=3
         }
       }
 
       set p = 1
-      for i=0:1:bluePrints.%Size()-1 {
-        write "mining with salvaged blueprint id ",bluePrints.%Get(i).id,!
-        set p = p *..Mine(bluePrints.%Get(i),0,0,0,1,0,0,32)
+      for i=0:1:blueprints.%Size()-1 {
+        write "mining with salvaged blueprint id ",blueprints.%Get(i).id,!
+        set p = p *..Mine(blueprints.%Get(i),0,0,0,1,0,0,32)
       }
 
       write "Part 2 answer : ",p,!

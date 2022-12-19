@@ -58,11 +58,7 @@ ClassMethod Part1And2(inputStream As %Stream.Object) As %Status
 {
     #Dim sc as %Status
     #Dim ex as %Exception.AbstractException
-    
-    #Dim line as %String
-
     #Dim i,t,p as %Integer    
-
    
     set sc = $$$OK
 

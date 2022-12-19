@@ -1,0 +1,150 @@
+Class dc.aoc2022.Day19 Extends Base
+{
+
+ClassMethod Run(fileName As %String = "input19.txt") As %Status
+{
+    #Dim sc as %Status
+    #Dim ex 
+    #Dim inputStream as %Stream.Object
+    
+    set sc = $$$OK
+    try {
+        set inputStream = ..GetInputStream(fileName,.sc)
+        $$$TOE(sc,sc)
+        $$$TOE(sc,..Part1(inputStream))
+        $$$TOE(sc,inputStream.Rewind())
+        $$$TOE(sc,..Part2(inputStream))
+    }
+    catch (ex) {
+      set sc = ex.AsStatus()
+    }
+    return sc
+}
+
+ClassMethod Part1(inputStream As %Stream.Object) As %Status
+{
+    #Dim sc as %Status
+    #Dim ex as %Exception.AbstractException
+    
+    #Dim line as %String
+
+   
+    set sc = $$$OK
+    try {        
+
+      set bluePrints = []
+
+      set matcher = ##class(%Regex.Matcher).%New("Blueprint ([0-9]+): Each ore robot costs ([0-9]+) ore\. Each clay robot costs ([0-9]+) ore\. Each obsidian robot costs ([0-9]+) ore and ([0-9]+) clay\. Each geode robot costs ([0-9]+) ore and ([0-9]+) obsidian\.")            
+
+
+      while ('inputStream.AtEnd)
+      {
+        set line = inputStream.ReadLine(,.sc)
+        set line = $zstrip(line,"<>C")
+        if matcher.Match(line) {          
+          set blueprint = {
+            "id" : (matcher.Group(1)+0),
+            "geoOre" : (matcher.Group(6)+0),
+            "geoObs" : (matcher.Group(7)+0),
+            "obsOre" : (matcher.Group(4)+0),
+            "obsCla" : (matcher.Group(5)+0),
+            "oreOre" : (matcher.Group(2)+0),
+            "claOre" : (matcher.Group(3)+0)
+          }
+          do bluePrints.%Push(blueprint)          
+        }
+
+      }
+
+      set t = 0
+      for i=0:1:bluePrints.%Size()-1 {
+        write "mining with blueprint id ",bluePrints.%Get(i).id,!
+        set t = t + (bluePrints.%Get(i).id*..Mine(bluePrints.%Get(i),0,0,0,1,0,0,24))
+      }
+      write "Part 1 answer : ",t,!
+    }
+    catch (ex) {
+      set sc = ex.AsStatus()
+    }
+    return sc
+}
+
+/// recursive backtracking 
+ClassMethod Mine(costs As %DynamicAbstractObject, ore As %Integer, cla As %Integer, obs As %Integer, oreRbt As %Integer, claRbt As %Integer, obsRbt As %Integer, clk As %Integer) As %Integer
+{
+  return:clk<=0 0
+
+  // mine geodes
+  return:(costs.geoOre <= ore)&&(costs.geoObs <= obs) (clk-1)+..Mine(costs,ore+oreRbt-costs.geoOre,cla+claRbt,obs+obsRbt-costs.geoObs,oreRbt,claRbt,obsRbt,clk-1)
+
+  // build obsidian mining robot
+  return:(costs.obsOre <= ore)&&(costs.obsCla <= cla) ..Mine(costs,ore+oreRbt-costs.obsOre,cla+claRbt-costs.obsCla,obs+obsRbt,oreRbt,claRbt,obsRbt+1,clk-1)
+
+  set result = 0
+
+  if costs.oreOre <= ore { // build ore mining robot
+    set t = ..Mine(costs,ore+oreRbt-costs.oreOre,cla+claRbt,obs+obsRbt,oreRbt+1,claRbt,obsRbt,clk-1)
+    set:result<t result = t
+  }
+
+  if costs.claOre <= ore { // build clay mining robot
+    set t = ..Mine(costs,ore+oreRbt-costs.claOre,cla+claRbt,obs+obsRbt,oreRbt,claRbt+1,obsRbt,clk-1)
+    set:result<t result = t
+  }
+
+  if ore < 6 {  // just let the robot(s) mine
+    set t = ..Mine(costs,ore+oreRbt,cla+claRbt,obs+obsRbt,oreRbt,claRbt,obsRbt,clk-1)
+    set:result<t result = t
+  }
+  return result
+}
+
+ClassMethod Part2(inputStream As %Stream.Object) As %Status
+{
+    #Dim line as %String
+
+    set sc = $$$OK
+    try {        
+
+      set bluePrints = []
+
+      set matcher = ##class(%Regex.Matcher).%New("Blueprint ([0-9]+): Each ore robot costs ([0-9]+) ore\. Each clay robot costs ([0-9]+) ore\. Each obsidian robot costs ([0-9]+) ore and ([0-9]+) clay\. Each geode robot costs ([0-9]+) ore and ([0-9]+) obsidian\.")            
+
+
+      set bpCnt=0
+
+      while ('inputStream.AtEnd)
+      {
+        set line = inputStream.ReadLine(,.sc)
+        set line = $zstrip(line,"<>C")
+        if matcher.Match(line) {          
+          set blueprint = {
+            "id" : (matcher.Group(1)+0),
+            "geoOre" : (matcher.Group(6)+0),
+            "geoObs" : (matcher.Group(7)+0),
+            "obsOre" : (matcher.Group(4)+0),
+            "obsCla" : (matcher.Group(5)+0),
+            "oreOre" : (matcher.Group(2)+0),
+            "claOre" : (matcher.Group(3)+0)
+          }
+          do bluePrints.%Push(blueprint)          
+          set bpCnt = bpCnt+1
+          quit:bpCnt>=3
+        }
+      }
+
+      set p = 1
+      for i=0:1:bluePrints.%Size()-1 {
+        write "mining with salvaged blueprint id ",bluePrints.%Get(i).id,!
+        set p = p *..Mine(bluePrints.%Get(i),0,0,0,1,0,0,32)
+      }
+
+      write "Part 2 answer : ",p,!
+    }
+    catch (ex) {
+      set sc = ex.AsStatus()
+    }
+    return sc
+}
+
+}

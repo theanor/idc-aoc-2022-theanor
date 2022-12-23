@@ -177,8 +177,6 @@ ClassMethod Part1And2(inputStream As %Stream.Object) As %Status
         }
       }
 
-      write "start node : ",startNode,!
-      write "end node : ",endNode,!
 
       do ..ShortestPath(.graph,startNode,endNode,rowCnt,colCnt,.seq)
       write "Part 1 answer : ",$listlength(seq)-1,!
@@ -186,19 +184,17 @@ ClassMethod Part1And2(inputStream As %Stream.Object) As %Status
       set minSteps = 999999
       for i=0:1:(rowCnt*colCnt)-1 {
         if graph(i,"alt") = "a" {
-          write "row ",i\colCnt," col ",i#colCnt," "
           kill seq
           do ..ShortestPath(.graph,i,endNode,rowCnt,colCnt,.seq)
           if seq'="" {
             set steps = $listlength(seq)-1
-            write steps," steps",!
             set:steps<minSteps minSteps = steps          
-          } else {
-            write "no path",!
+          } else {            
           }
+          write "."
         }
       }
-      write "Part 2 answer : ",minSteps,!
+      write !,"Part 2 answer : ",minSteps,!
     }
     catch (ex) {
       set sc = ex.AsStatus()

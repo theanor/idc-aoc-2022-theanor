@@ -160,7 +160,7 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
           if (pkt.%Size()=1) && (pkt.%Get(0).%Size()=1) && (pkt.%Get(0).%Get(0)=6) { set idxdiv6 = k+1}
           set k = $order(packets(k))
         }
-        write "Part 2 answer : ",idxdiv2*idxdiv6
+        write "Part 2 answer : ",idxdiv2*idxdiv6,!
     }
     catch (ex) {
       set sc = ex.AsStatus()

@@ -49,7 +49,7 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
             set score = $get(moveScore(myMove),0)+$get(matchScore(opMove,myMove),0)
             set totalScore = totalScore+score
         }
-        write !,"Part 1 answer : ",totalScore
+        write "Part 1 answer : ",totalScore,!
     }
     catch (ex) {
       set sc = ex.AsStatus()
@@ -94,7 +94,7 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
             set score = $get(moveScore(myMove),0)+$get(matchScore(opMove,myMove),0)
             set totalScore = totalScore+score
         }
-        write !,"Part 2 answer : ",totalScore
+        write "Part 2 answer : ",totalScore,!
     }
     catch (ex) {
       set sc = ex.AsStatus()

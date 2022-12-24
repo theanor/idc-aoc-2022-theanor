@@ -27,8 +27,8 @@ ClassMethod DrawScan(ByRef scan)
   
   set minx=..#MAXINT
   set miny=..#MAXINT
-  set maxx=-..#MAXINT
-  set maxy=-..#MAXINT
+  set maxx=0
+  set maxy=0
 
   set x=$order(scan(""))
   while x '= "" {
@@ -50,6 +50,8 @@ ClassMethod DrawScan(ByRef scan)
   }
 }
 
+/// great thing, sparse arrays !
+/// nay, Rudolf?
 ClassMethod Scan(inputStream As %Stream.Object, ByRef scan, Output maxy As %Integer) As %Status
 {
   #Dim sc as %Status
@@ -67,17 +69,12 @@ ClassMethod Scan(inputStream As %Stream.Object, ByRef scan, Output maxy As %Inte
       while ('inputStream.AtEnd)
       {
         set line = inputStream.ReadLine(,.sc)
-        set line = $zstrip(line,"<>C")        
+        set line = $zstrip(line,"<>C")
         set points = $listfromstring(line,"->")        
-        if $listlength(points) > 0 {
         set ptr = 0
-        set point = $listget(points,1)
-        set x1=$zstrip($piece(point,",",1),"<>W")
-        set y1=$zstrip($piece(point,",",2),"<>W")
-        set maxy=-..#MAXINT
-        s pi = 2
-        while pi <= $listlength(points) {
-         s point = $listget(points,pi) 
+        set x1=0,y1=0
+        set maxy=0
+        while $listnext(points,ptr,point) {
          set x2 = $zstrip($piece(point,",",1),"<>W")
          set y2 = $zstrip($piece(point,",",2),"<>W")
          set:y2>maxy maxy = y2
@@ -95,10 +92,8 @@ ClassMethod Scan(inputStream As %Stream.Object, ByRef scan, Output maxy As %Inte
          }
          set x1=x2
          set y1=y2
-         set pi = pi +1
         }
       }
-     }
   } catch (ex) {
     s sc = ex.AsStatus()
   }
@@ -120,7 +115,7 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
     set sc = $$$OK
     try {    
          
-      $$$TOE(sc,..Scan(inputStream,.scan,.maxy))      
+      $$$TOE(sc,..Scan(inputStream,.scan,.maxy))
 
       set ox=500,oy=0
       set scan(ox,oy) = "+"

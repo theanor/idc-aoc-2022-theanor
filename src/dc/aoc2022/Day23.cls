@@ -176,10 +176,7 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
 {
     #Dim sc as %Status
     #Dim ex as %Exception.AbstractException
-    
-    #Dim line as %String
-
-   
+       
     set sc = $$$OK
     try {        
 

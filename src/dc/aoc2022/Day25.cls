@@ -84,8 +84,6 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
 
 ClassMethod Part2(inputStream As %Stream.Object) As %Status
 {
-    #Dim line as %String
-
     set sc = $$$OK
     try {        
       write "Part 2 answer : \o/ start the blender and enjoy a ... merry Christmas and happy 2023 !",!

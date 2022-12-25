@@ -175,7 +175,6 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
 /// 
 ClassMethod Part2(inputStream As %Stream.Object) As %Status
 {
-    #Dim line as %String
     #Dim grid
     #Dim moves
     #Dim rows,cols

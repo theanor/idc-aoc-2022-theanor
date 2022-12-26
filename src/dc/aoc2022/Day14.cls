@@ -1,7 +1,7 @@
 Class dc.aoc2022.Day14 Extends Base
 {
 
-ClassMethod Run(fileName As %String = "input14.txt") As %Status
+ClassMethod Run(fileName As %String = "input14-test.txt") As %Status
 {
     #Dim sc as %Status
     #Dim ex 
@@ -23,61 +23,82 @@ ClassMethod Run(fileName As %String = "input14.txt") As %Status
 
 ClassMethod DrawScan(ByRef scan)
 {
-  #Dim minx,miny,maxx,maxy,x,y As %Integer
+  #Dim x,y As %Integer
   
-  set minx=..#MAXINT
-  set miny=..#MAXINT
-  set maxx=0
-  set maxy=0
-
-  set x=$order(scan(""))
-  while x '= "" {
-    set y=$order(scan(x,""))
-    while y '= "" {
-      set:x<minx minx=x
-      set:x>maxx maxx=x
-      set:y<miny miny=y
-      set:y>maxy maxy=y      
-      set y = $order(scan(x,y))
-    }
-    set x = $order(scan(x))
-  }
-  for y=miny:1:maxy {
-   for x=minx:1:maxx {
+  for y=0:1:scan("height")-1 {
+   for x=0:1:scan("width")-1 {
     write $get(scan(x,y),".")
    }
    write !
   }
+  write "height=",scan("height")," width=",scan("width"),!
 }
 
-/// great thing, sparse arrays !
-/// nay, Rudolf?
-ClassMethod Scan(inputStream As %Stream.Object, ByRef scan, Output maxy As %Integer) As %Status
+ClassMethod ParseInput1(inputStream As %Stream.Object, ByRef scan) As %Status
 {
-  #Dim sc as %Status
+  #Dim sc as %Status = $$$OK
   #Dim ex as %Exception.AbstractException
-
-  #Dim line as %String
-  #Dim points as %List
-  #Dim point as %String
-  #Dim x1,y1,x2,y2 As %Integer
-  #Dim d As %Integer
-  #Dim ptr As %Integer
   
-  s sc = $$$OK
   try {
+      s miny = ..#MAXINT
+      s minx = ..#MAXINT
+      s maxy = -..#MAXINT
+      s maxx = -..#MAXINT      
       while ('inputStream.AtEnd)
       {
         set line = inputStream.ReadLine(,.sc)
         set line = $zstrip(line,"<>C")
         set points = $listfromstring(line,"->")        
-        set ptr = 0
-        set x1=0,y1=0
-        set maxy=0
+        set ptr = 0          
+        s next = $listnext(points,ptr,point)        
+        set x1=$zstrip($piece(point,",",1),"<>W"),y1=$zstrip($piece(point,",",2),"<>W")        
+        set:y1>maxy maxy = y1        
+        set:y1<miny miny = y1
+        set:x1>maxx maxx = x1
+        set:x1<minx minx = x1        
         while $listnext(points,ptr,point) {
          set x2 = $zstrip($piece(point,",",1),"<>W")
          set y2 = $zstrip($piece(point,",",2),"<>W")
-         set:y2>maxy maxy = y2
+         set:y2>maxy maxy = y2        
+         set:y2<miny miny = y2
+         set:x2>maxx maxx = x2
+         set:x2<minx minx = x2        
+         set x1=x2
+         set y1=y2
+        }
+      }
+      s scan("height") = maxy+1
+      s scan("width") = (maxx-minx)+1
+      s scan("minx") = minx
+      s scan("maxx") = maxx
+      s scan("miny") = miny
+      s scan("maxy") = maxy
+
+
+      for x=0:1:scan("width")-1 {
+        for y=0:1:scan("height")-1 {
+          s scan(x,y)="."
+        }
+      }
+      $$$TOE(sc,inputStream.Rewind())
+      while ('inputStream.AtEnd)
+      {
+        set line = inputStream.ReadLine(,.sc)
+        set line = $zstrip(line,"<>C")
+        set points = $listfromstring(line,"->")        
+        set ptr = 0          
+        s next = $listnext(points,ptr,point)        
+        set x1=$zstrip($piece(point,",",1),"<>W"),y1=$zstrip($piece(point,",",2),"<>W")        
+        s x1 = x1 - minx
+        
+
+        while $listnext(points,ptr,point) {
+         set x2 = $zstrip($piece(point,",",1),"<>W")
+         set y2 = $zstrip($piece(point,",",2),"<>W")
+
+         s x2 = x2 - minx
+        
+         
          if x1=x2 {
           set d = $select(y1<=y2:1,1:-1)
           for y=y1:d:y2 {
@@ -100,55 +121,140 @@ ClassMethod Scan(inputStream As %Stream.Object, ByRef scan, Output maxy As %Inte
   q sc
 }
 
+ClassMethod ParseInput2(inputStream As %Stream.Object, ByRef scan) As %Status
+{
+  #Dim sc as %Status = $$$OK
+  #Dim ex as %Exception.AbstractException
+  
+  try {
+      s miny = ..#MAXINT
+      s minx = ..#MAXINT
+      s maxy = -..#MAXINT
+      s maxx = -..#MAXINT      
+      while ('inputStream.AtEnd)
+      {
+        set line = inputStream.ReadLine(,.sc)
+        set line = $zstrip(line,"<>C")
+        set points = $listfromstring(line,"->")        
+        set ptr = 0          
+        s next = $listnext(points,ptr,point)        
+        set x1=$zstrip($piece(point,",",1),"<>W"),y1=$zstrip($piece(point,",",2),"<>W")        
+        set:y1>maxy maxy = y1        
+        set:y1<miny miny = y1
+        set:x1>maxx maxx = x1
+        set:x1<minx minx = x1        
+        while $listnext(points,ptr,point) {
+         set x2 = $zstrip($piece(point,",",1),"<>W")
+         set y2 = $zstrip($piece(point,",",2),"<>W")
+         set:y2>maxy maxy = y2        
+         set:y2<miny miny = y2
+         set:x2>maxx maxx = x2
+         set:x2<minx minx = x2        
+         set x1=x2
+         set y1=y2
+        }
+      }
+      s scan("height") = maxy+3
+      s scan("width") = maxx+2*scan("height")
+      s scan("minx") = minx
+      s scan("maxx") = maxx
+      s scan("miny") = miny
+      s scan("maxy") = maxy
+
+
+      for x=0:1:scan("width")-1 {
+        for y=0:1:scan("height")-1 {
+          s scan(x,y)="."
+        }
+      }
+      for x=0:1:scan("width")-1 {
+        s scan(x,scan("height")-1)="#"
+      }
+      $$$TOE(sc,inputStream.Rewind())
+      while ('inputStream.AtEnd)
+      {
+        set line = inputStream.ReadLine(,.sc)
+        set line = $zstrip(line,"<>C")
+        set points = $listfromstring(line,"->")        
+        set ptr = 0          
+        s next = $listnext(points,ptr,point)        
+        set x1=$zstrip($piece(point,",",1),"<>W"),y1=$zstrip($piece(point,",",2),"<>W")        
+        s x1 = x1 
+        
+
+        while $listnext(points,ptr,point) {
+         set x2 = $zstrip($piece(point,",",1),"<>W")
+         set y2 = $zstrip($piece(point,",",2),"<>W")
+
+         s x2 = x2 
+         
+         if x1=x2 {
+          set d = $select(y1<=y2:1,1:-1)
+          for y=y1:d:y2 {
+            set scan(x1,y) = "#"
+          }
+         }
+         if y1=y2 {
+          set d = $select(x1<=x2:1,1:-1) 
+          for x=x1:d:x2 {
+            set scan(x,y1) = "#"
+          }            
+         }
+         set x1=x2
+         set y1=y2
+        }
+      }
+  } catch (ex) {
+    s sc = ex.AsStatus()
+  }
+  q sc
+}
+
 ClassMethod Part1(inputStream As %Stream.Object) As %Status
 {
     #Dim sc as %Status
     #Dim ex as %Exception.AbstractException
     
     #Dim scan
-    #Dim maxy As %Integer
-    #Dim ox,oy,sx,sy,nx,ny As %Integer
-    #Dim restCnt As %Integer
-    #Dim falling As %Boolean
+    #Dim sx,sy As %Integer
+    #Dim cnt As %Integer
+    #Dim settled As %Boolean
 
    
     set sc = $$$OK
     try {    
          
-      $$$TOE(sc,..Scan(inputStream,.scan,.maxy))
-
-      set ox=500,oy=0
-      set scan(ox,oy) = "+"
-      set sy=oy,sx=ox
-      set restCnt = 0
-      
-      while sy<=maxy {
-       set falling=1
-       while (sy<=maxy) && falling {
-         set scan(sx,sy)="+"         
-         if $get(scan(sx,sy+1)," ")=" " {
-          set nx = sx
-          set ny = sy+1
-         } elseif $get(scan(sx-1,sy+1)," ")=" " {
-          set nx=sx-1,ny=sy+1
-         } elseif $get(scan(sx+1,sy+1)," ")=" " {
-          set nx=sx+1,ny=sy+1
-         } else {
-          set falling=0
-         }
-         if falling {
-          set scan(sx,sy)=" ",sx=nx,sy=ny
-         } else {
-          set scan(sx,sy) = "o"
-          s restCnt = restCnt+1
-          s sx=ox,sy=oy
-          quit
-         }
-       }
-
-      }
-      
-      write "Part 1 answer : ",restCnt,!
+      $$$TOE(sc,..ParseInput1(inputStream,.scan))
+      s cnt = 0        
+      while(1) {
+        s sx = 500-scan("minx")
+        s sy = 0
+        s settled = 0
+        s cnt = cnt+1
+        while (sx >=0) && (sx < scan("width")) && (sy < scan("height")) {
+          if $data(scan(sx,sy+1)) && (scan(sx,sy+1) '= "#") {
+            s sy = sy+1
+          } else {
+            if (sy=(scan("height")-1)) || (sx=0) || (sx=(scan("width")-1)) {
+              quit
+            } else {
+              if (scan(sx-1,sy+1) '= "#") {
+                s sx = sx-1
+                s sy = sy+1
+              } elseif (scan(sx+1,sy+1) '= "#") {
+                s sx=sx+1
+                s sy=sy+1
+              } else {
+                s scan(sx,sy)="#"
+                s settled = 1        
+                quit
+              }
+            }
+          }
+        }
+        quit:'settled
+      }      
+      write "Part 1 answer : ",cnt-1,!      
     }
     catch (ex) {
       set sc = ex.AsStatus()
@@ -162,55 +268,39 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
     #Dim ex as %Exception.AbstractException
     
     #Dim scan
-    #Dim maxy As %Integer
-    #Dim ox,oy,sx,sy,nx,ny As %Integer
-    #Dim restCnt As %Integer
-    #Dim falling As %Boolean
+    #Dim sx,sy As %Integer
+    #Dim cnt As %Integer
+    #Dim settled As %Boolean
 
    
     set sc = $$$OK
     try {    
 
-      $$$TOE(sc,..Scan(inputStream,.scan,.maxy))
-         
-      set ox=500,oy=0
-      set scan(ox,oy) = "+"      
-      set sy=oy,sx=ox
-      set restCnt = 0
-      
-      while $get(scan(ox,oy)) '= "o" {
-       set falling=1
-       while (sy<=(maxy+1)) && falling {
-         set scan(sx,sy)="+"
-         if (sy=(maxy+1)) {
-          set scan(sx,sy)="o"
-          set falling=0
-          set restCnt = restCnt+1
-          set sx=ox,sy=oy
-          quit
-         }
-         if $get(scan(sx,sy+1)," ")=" " {
-          set nx = sx,ny = sy+1
-         } elseif $get(scan(sx-1,sy+1)," ")=" " {
-          set nx=sx-1,ny=sy+1
-         } elseif $get(scan(sx+1,sy+1)," ")=" " {
-          set nx=sx+1,ny=sy+1
-         } else {
-          set falling=0
-         }
-         if falling {
-          set scan(sx,sy)=" "
-          set sx = nx,sy = ny        
-         } else {
-          set scan(sx,sy) = "o"
-          set restCnt = restCnt+1
-          set sx=ox,sy=oy
-          quit
-         }
-       }
-
+      $$$TOE(sc,..ParseInput2(inputStream,.scan))
+      s cnt = 0        
+      while(1) {
+        s sx = 500
+        s sy = 0
+        s cnt = cnt+1
+        while (1) {
+          if $data(scan(sx,sy+1)) && (scan(sx,sy+1) '= "#") {
+            s sy = sy+1
+          } else {
+              if $get(scan(sx-1,sy+1)) '= "#" {
+                s sx = sx-1
+                s sy = sy+1
+              } elseif $get(scan(sx+1,sy+1)) '= "#" {
+                s sx=sx+1
+                s sy=sy+1
+              } else {
+                s scan(sx,sy)="#"
+                quit
+              }
+          }
+        }
+        quit:(sy=0)
       }      
-      write "Part 2 answer : ",restCnt,!
+      write "Part 2 answer : ",cnt,!      
     }
     catch (ex) {
       set sc = ex.AsStatus()

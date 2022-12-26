@@ -51,6 +51,7 @@ ClassMethod ParseInput1(inputStream As %Stream.Object, ByRef scan) As %Status
         set points = $listfromstring(line,"->")        
         set ptr = 0          
         s next = $listnext(points,ptr,point)        
+        kill next  // to prevent code smell 
         set x1=$zstrip($piece(point,",",1),"<>W"),y1=$zstrip($piece(point,",",2),"<>W")        
         set:y1>maxy maxy = y1        
         set:y1<miny miny = y1
@@ -88,6 +89,7 @@ ClassMethod ParseInput1(inputStream As %Stream.Object, ByRef scan) As %Status
         set points = $listfromstring(line,"->")        
         set ptr = 0          
         s next = $listnext(points,ptr,point)        
+        kill next // to prevent code smell
         set x1=$zstrip($piece(point,",",1),"<>W"),y1=$zstrip($piece(point,",",2),"<>W")        
         s x1 = x1 - minx
         
@@ -270,7 +272,6 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
     #Dim scan
     #Dim sx,sy As %Integer
     #Dim cnt As %Integer
-    #Dim settled As %Boolean
 
    
     set sc = $$$OK

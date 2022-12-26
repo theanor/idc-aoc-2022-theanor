@@ -77,16 +77,16 @@ ClassMethod Part1(inputStream As %Stream.Object) As %Status
             for it=1:1:$listlength(items) {
 
               set old = $listget(items,it)
-              set new = old              
-              xecute ("(old,new) set "_monkeys(mky,"fct"), old, .new)              
-              set new = new \ 3              
-              if (new # monkeys(mky,"div"))=0 {
+              set nxt = old              
+              xecute ("(old,nxt) set "_monkeys(mky,"fct"), old, .nxt)              
+              set nxt = nxt \ 3              
+              if (nxt # monkeys(mky,"div"))=0 {
                 set dest = monkeys(mky,"true")
               } else {
                 set dest = monkeys(mky,"false")
               }              
 
-              set $list(monkeys(dest,"items"),*+1) = new
+              set $list(monkeys(dest,"items"),*+1) = nxt
 
               set monkeys(mky,"isp") = monkeys(mky,"isp") + 1
             }
@@ -177,18 +177,18 @@ ClassMethod Part2(inputStream As %Stream.Object) As %Status
             for it=1:1:$listlength(items) {
 
               set old = $listget(items,it)
-              set new = old              
-              xecute ("(old,new) set "_monkeys(mky,"fct"), old, .new)              
+              set nxt = old              
+              xecute ("(old,nxt) set "_monkeys(mky,"fct"), old, .nxt)              
 
-              set new = new # p2div
+              set nxt = nxt # p2div
 
-              if (new # monkeys(mky,"div"))=0 {
+              if (nxt # monkeys(mky,"div"))=0 {
                 set dest = monkeys(mky,"true")
               } else {
                 set dest = monkeys(mky,"false")
               }              
 
-              set $list(monkeys(dest,"items"),*+1) = new
+              set $list(monkeys(dest,"items"),*+1) = nxt
 
               set monkeys(mky,"isp") = monkeys(mky,"isp") + 1
             }

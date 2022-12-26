@@ -140,6 +140,7 @@ ClassMethod ParseInput2(inputStream As %Stream.Object, ByRef scan) As %Status
         set points = $listfromstring(line,"->")        
         set ptr = 0          
         s next = $listnext(points,ptr,point)        
+        kill next // to prevent code smell
         set x1=$zstrip($piece(point,",",1),"<>W"),y1=$zstrip($piece(point,",",2),"<>W")        
         set:y1>maxy maxy = y1        
         set:y1<miny miny = y1
